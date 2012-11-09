@@ -5,32 +5,41 @@
 int main () {
 
 	int * days;
-	int count,max,aveTemp,n,curent,psum,av;
+	int maxSum,maxStartIndex,maxEndIndex,n,aveTemp,count;
 
+	maxStartIndex = 0;
+	maxEndIndex = 0;
+	maxSum = -214783647;
 	scanf("%d %d",&n,&aveTemp);
 
 	days = malloc(n*sizeof(int));
 	
 	for (count=0;count<n;count++) {
 		scanf("%d",&days[count]);
-		days[count] = days[count] - aveTemp;
+		//days[count] = days[count] - aveTemp;
 	} 
 		
 	
-	curent = 0;
-	curent = -1;
-	while(curent < n) {
-		count = 1;
-		psum = 0;
-		while ((curent+count) < n) {
-			psum = psum + days[curent+count];
-			if ((psum >= 0) && (max < count)) max = count;
-			count++;
+	int currentMaxSum = 0;
+	int currentStartIndex = 0;
+	int currentEndIndex;
+	for (currentEndIndex=1;currentEndIndex<=n;currentEndIndex++) {
+		currentMaxSum = currentMaxSum + days[currentEndIndex];
+		
+		if (currentMaxSum > maxSum) {
+			maxSum=currentMaxSum;
+			maxStartIndex = currentStartIndex;
+			maxEndIndex = currentEndIndex;
 		}
-		curent++;	
-	}
 
-	printf("%d\n", max);
+		 if (currentMaxSum < 0) {
+            currentMaxSum = 0;
+            currentStartIndex = currentEndIndex + 1 ;
+		}
+	}
+	
+
+	printf("%d %d\n", maxEndIndex, maxStartIndex);
 	
 
 }
