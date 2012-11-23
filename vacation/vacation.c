@@ -44,8 +44,8 @@ int main () {
 
 	
 	sums[0] = 0;
-	int negative = 0;
-	int positive = 0;
+	//int negative = 0;
+	//int positive = 0;
 	for (count=1;count<=n;count++) {
 		scanf("%d",&day);
 		day = day - aveTemp;

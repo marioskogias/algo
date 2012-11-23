@@ -9,8 +9,8 @@ void fixOne(int  * table,int no,int place,int minimum,int * maxSofar) { //υπο
 	int step = (no/2)*minimum;
 	//if (no%2==0) step = step/2;	
 
-	if (no%2==0) step = step - step/2; 
-	printf("step = %d\n",step);
+	if (no%2==0) step = step - minimum/2; 
+	printf("step = %d\n",step/2);
 	*table = place - step;
 	*(table+1) = place + step;
 
@@ -40,26 +40,43 @@ scanf("%d",&position); // adding the first double
 position = position*2;
 scanf("%d",&amount);
 fixOne(table,amount,position,minDis,&maxMove);
-printf("from main begin = %d and end = %d\n", *table, *(table+1));
+printf("from main begin = %.2f and end = %.2f\n", (float)(*table)/2, (float)*(table+1)/2);
 table = table +2;
+printf ("maxMove = %.2f\n",(float)maxMove/2);
 
-int difference;
 int rest;
+int mustMove;
+int offset;
 for (i=1;i<pointNo;i++) {
 	scanf("%d",&position);
 	position = position*2; 
 	scanf("%d",&amount);
 	fixOne(table,amount,position,minDis,&maxMove);
-	printf("from main begin = %d and end = %d\n", *table, *(table+1));
+	printf("from main begin = %.2f and end = %.2f\n", (float)(*table)/2, (float)*(table+1)/2);
 
 	
 	
-	difference = *(table-1)+minDis-*(table); 	
-	if (difference>0) {
+	mustMove = *(table-1)+minDis-*(table); 
+	printf("mustMove = %.2f\n",(float)mustMove/2 );	
+	//offset = (*(table+1)-*(table))/2;
+	offset = (amount/2)*minDis;
+	if (amount%2==0) offset = offset - minDis/2;	
+
+	
+	printf("offset is = %.2f\n",(float)offset/2);
+	if (mustMove>0)  // check here....
+
+		if (mustMove > (maxMove - offset)) {
+
+			rest = mustMove - (maxMove - offset);
+			maxMove =  maxMove + rest/2; //(maxMove + mustMove )/2;
+			*(table+1) = maxMove + *(table+1);
+			
+		} else *(table+1) = mustMove + *(table+1);
 		
 		
 
-		rest = maxMove - ((*(table+1)-*table)/2);
+	/*	rest = maxMove - ((*(table+1)-*table)/2);
 //		printf("befiore is %d\n",*(table+1));
 		*(table+1) = *(table+1) + min(rest,difference); // thelei min me to difference
 //		printf("after is %d\n",*(table+1));
@@ -68,10 +85,10 @@ for (i=1;i<pointNo;i++) {
 			*(table+1) = *(table+1) + (difference - rest)/2;
 			maxMove = maxMove + (difference - rest)/2;
 		}
-	} 
-	printf("finally %d\n", *(table+1));
+	} */
+	printf("finally %.2f and maxMove = %.2f\n", (float)*(table+1)/2,(float)maxMove/2);
 	table = table+2;
-//	printf ("%d, maxMove = %d\n",i,maxMove);
+	printf ("maxMove = %.2f\n",(float)maxMove/2);
 }
 	printf("%.2f\n",(float)maxMove/2);
 }
