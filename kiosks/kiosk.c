@@ -6,11 +6,6 @@
 #endif
 
 void fixOne(int  * previous, int * beg, int * end,int amount,int place,int minimum,int * maxSofar) { //υπολογισμός άκρων διστήματος
-	//int step = (no/2)*minimum;
-	//if (no%2==0) step = step/2;	 // alliws (no-1)*minimum/2
-
-	//if (no%2==0) step = step - minimum/2; 
-	//printf("step = %d\n",step/2);
 	int step = (amount-1)*minimum/2;
 	*previous = *end;
 	*beg = place - step;
@@ -69,16 +64,21 @@ for (i=1;i<pointNo;i++) {
 	
 	//printf("offset is = %.2f\n",(float)offset/2);
 	if (mustMove>0)  // check here....
-
-		if (mustMove > (maxMove - offset)) {
-
+  
+    		if (mustMove > (maxMove - offset)) {
 			rest = mustMove - (maxMove - offset);
 			maxMove =  maxMove + rest/2; //(maxMove + mustMove )/2;
-			right = maxMove + right;
+			right = right + maxMove - offset;
 			
 		} else right = mustMove + right;
-	else right = right - min(abs(mustMove),maxMove-offset); 
-		
+	else if (mustMove < 0) right = right - min(abs(mustMove),maxMove-offset); 
+  
+  /* if ((mustMove + offset) > maxMove) {
+	rest = mustMove + offset - maxMove;
+	maxMove = maxMove + rest/2;
+	right = right + maxMove - offset;
+
+   }*/
 	//printf("finally %.2f and maxMove = %.2f\n", (float)*right/2,(float)maxMove/2);
 	
 	
