@@ -8,7 +8,7 @@
 	#define min( a, b ) ( ((a) < (b)) ? (a) : (b) )
 #endif
 
-void fixOne(int  * previous, int * beg, int * end,int amount,int place,int minimum,int * maxSofar) { //υπολογισμός άκρων διστήματος
+void fixOne(long long int  * previous, long long int * beg, long long int * end,long long int amount,long long int place,long long int minimum,long long int * maxSofar) { //υπολογισμός άκρων διστήματος
 	int step = (amount-1)*minimum/2;
 	*previous = *end;
 	*beg = place - step;
@@ -21,26 +21,26 @@ void fixOne(int  * previous, int * beg, int * end,int amount,int place,int minim
 
 int main() {
 
-int pointNo,minDis;
+long long int pointNo,minDis;
 
-scanf("%d",&pointNo);
-scanf("%d",&minDis);
+scanf("%lld",&pointNo);
+scanf("%lld",&minDis);
 
 minDis = 2*minDis;
 
 
 
- int i;
- int position;
- int amount;
- int maxMove = 0;
- int previousRight ;
- int left,right;
- int offset;
+long long  int i;
+long long int position;
+long long int amount;
+long long int maxMove = 0;
+long long  int previousRight ;
+long long int left,right;
+long long int offset;
 
-scanf("%d",&position); // adding the first double
+scanf("%lld",&position); // adding the first double
 position = position*2;
-scanf("%d",&amount);
+scanf("%lld",&amount);
 offset = (amount-1)*minDis/2;
 left = position - offset;
 right = position + offset;
@@ -54,9 +54,9 @@ int rest;
 int mustMove;
 
 for (i=1;i<pointNo;i++) {
-	scanf("%d",&position);
+	scanf("%lld",&position);
 	position = position*2; 
-	scanf("%d",&amount);
+	scanf("%lld",&amount);
 	offset = (amount-1)*minDis/2;
 	previousRight = right; 
 	left = position - offset;
@@ -66,18 +66,18 @@ for (i=1;i<pointNo;i++) {
 	
 	
 	mustMove = previousRight+minDis-left; 
-	//printf("mustMove = %.2f\n",(float)mustMove/2 );	
+//	printf("mustMove = %.2f\n",(float)mustMove/2 );	
 	
 	
 	
 
 	
-	//printf("offset is = %.2f\n",(float)offset/2);
+//	printf("offset is = %.2f\n",(float)offset/2);
 	if (mustMove>0)  // check here....
   
     		if (mustMove > abs(maxMove - offset)) {
 			rest = mustMove - abs(offset-maxMove);	//rest = mustMove - (maxMove - offset);
-			//printf("rest = %f\n",(float)rest/2);
+		//	printf("rest = %f\n",(float)rest/2);
 			maxMove = max(offset,maxMove) + rest/2;	//maxMove =  maxMove + rest/2; //(maxMove + mustMove )/2;
 			right = right + maxMove - offset;
 			
@@ -88,11 +88,13 @@ for (i=1;i<pointNo;i++) {
 			}
 	else if (mustMove < 0) {
 		right = right - min(abs(mustMove),maxMove-offset); 
-  //		printf("needed to shorten\n");
+  		maxMove = max(maxMove,offset); //isws einai lathos
+  	//	printf("needed to shorten\n");
   		}
+	else maxMove = max(maxMove,offset);	
 
    
-	//	printf("The New max just became:%f NewMostRight=%f\n",(float)maxMove/2,(float)right/2);	
+		//printf("The New max just became:%f NewMostRight=%f\n",(float)maxMove/2,(float)right/2);	
 	
 }
 	printf("%.2f\n",(float)maxMove/2);
