@@ -15,17 +15,27 @@ int main() {
 	int size;
 	scanf("%d",&size);
 
-	//int * scores = malloc(size*size*sizeof(int));
 	int scores[size][size];
 
+
 	int i,j;
+	int * temp = scores;
+	for (i=0;i<size;i++) 
+		for (j=0;j<size;j++) {
+			*(temp + i*size+j) = 0;
+			//printf("i=%d j=%d\n",i,j);
+		}
+			 
 
-		for (i=0;i<size;i++) 
-		for (j=0;j<size;j++)
-			scores[i][j]=0;
-
-	for (i=0;i<size;i++)  // στοιχεία στη διαγώνιο
+	int sums[size+1];
+	
+	sums[0] = 0;
+ 
+	for (i=0;i<size;i++) { // στοιχεία στη διαγώνιο
 		scanf("%d",&scores[i][i]);
+		sums[i+1] = sums[i]+scores[i][i];
+	}  
+		
 
 	for(i=1;i<=size;i++)   // 2άδες στην υπερδιαγώνιο 
 		scores[i-1][i] = min(scores[i][i],scores[i-1][i-1]);
@@ -53,18 +63,19 @@ int main() {
 				sum1 = 0;
 				sum2 = 0;
 
-			//	printf("k = %d\n",k);
+			//	printf("k = %d\n",k);*/
 
-				for (j=i;j<=k;j++) 
-					sum1 = sum1 + scores[j][j];
+				
+
+				sum1 = sums[k+1] - sums[i]; 
 
 				if (i!=k)		// prosoxh
 					sum1 = sum1 + scores[i][k];
 
 				//printf("sum1 = %d\n",sum1);
 
-				for (j=k+1;j<=end;j++)
-					sum2 = sum2 + scores[j][j];
+
+				sum2 = sums[end+1] - sums[k+1]; 
 
 				if ((k+1)!=end)
 					sum2 = sum2 + scores[k+1][end];
@@ -75,14 +86,14 @@ int main() {
 					minimum = min(sum1,sum2);	
 			}
 
-			scores[i][end] = minimum;
+			scores[i][end] = minimum; 
 
 			//printf("inserted %d\n",minimum);
 
 		}
 
 		
-	}
+	} 
 
 	/*for (i=0;i<size;i++) {
 		for (j=0;j<size;j++)
