@@ -15,7 +15,7 @@ int main() {
 	int size;
 	scanf("%d",&size);
 
-	int scores[size][size];
+	int * scores = malloc(size*size*sizeof(int));
 
 
 	int i,j;
@@ -27,18 +27,18 @@ int main() {
 		}
 			 
 
-	int sums[size+1];
+	int * sums = malloc((size+1)*sizeof(int));
 	
 	sums[0] = 0;
- 
+
 	for (i=0;i<size;i++) { // στοιχεία στη διαγώνιο
-		scanf("%d",&scores[i][i]);
-		sums[i+1] = sums[i]+scores[i][i];
+		scanf("%d",scores+i*size+i);
+		sums[i+1] = sums[i]+ *(scores+i*size+i);
 	}  
 		
 
-	for(i=1;i<=size;i++)   // 2άδες στην υπερδιαγώνιο 
-		scores[i-1][i] = min(scores[i][i],scores[i-1][i-1]);
+	for(i=1;i<size;i++)   // 2άδες στην υπερδιαγώνιο 
+		*(scores+(i-1)*size+i) = min(*(scores+i*size+i),*(scores+(i-1)*size+i-1));
 
 	int l; // to mhkos parathurou
 	int k; // to shmeio tomhs, thesh tou stoixeiou meta apo to opoio kovoume
@@ -70,7 +70,7 @@ int main() {
 				sum1 = sums[k+1] - sums[i]; 
 
 				if (i!=k)		// prosoxh
-					sum1 = sum1 + scores[i][k];
+					sum1 = sum1 + *(scores+i*size+k);
 
 				//printf("sum1 = %d\n",sum1);
 
@@ -78,7 +78,7 @@ int main() {
 				sum2 = sums[end+1] - sums[k+1]; 
 
 				if ((k+1)!=end)
-					sum2 = sum2 + scores[k+1][end];
+					sum2 = sum2 + *(scores+(k+1)*size+end);
 
 						//		printf("sum2 = %d\n",sum2);
 
@@ -86,7 +86,7 @@ int main() {
 					minimum = min(sum1,sum2);	
 			}
 
-			scores[i][end] = minimum; 
+			*(scores+i*size+end) = minimum; 
 
 			//printf("inserted %d\n",minimum);
 
@@ -101,7 +101,7 @@ int main() {
 		printf("\n");
 	}*/
 
-	printf("the result is %d\n",scores[0][size-1]);
+	printf("the result is %d\n",*(scores+size-1));
 
 
 }
