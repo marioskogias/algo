@@ -100,12 +100,12 @@ int main() {
 		} else 
 			i++;
 	}
-	printf("the women are\n");
+	/*printf("the women are\n");
 
 	for (i=0;i<size;i++) 
 		printf("%d\n",couples[i].woman);
 
-	printf("-----------------------------\n");
+	printf("-----------------------------\n");*/
 
 	/*find the longest increasing subsequence in O(nlogn)*/
 
@@ -132,7 +132,7 @@ int main() {
     	for (u = 0, v = b.size()-1; u < v;) {
 
 			int c = (u + v) / 2;
-			if (couples[b[c]].woman < couples[i].woman) 
+			if (couples[b[c]].woman <= couples[i].woman) 
 				u=c+1; 
 			else v=c;
 		}
@@ -147,7 +147,7 @@ int main() {
 
     }
 
-    //for (u = b.size(), v = b.back(); u--; v = p[v]) b[u] = v;
+    for (u = b.size(), v = b.back(); u--; v = p[v]) b[u] = v;
 
 
     printf("%d\n",(int) b.size());
