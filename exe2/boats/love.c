@@ -63,11 +63,23 @@ int main() {
 		scanf("%d",&((couples+i)->woman));
 	}
 
-	/* sort the men increasingly with mergesort*/
+	/* sort the men increasingly with random quicksort*/
 
 	randomQuickSort(couples,0,size-1);
 
-	for(i=0;i<size;i++)
-		printf("%d\n",couples[i].man);
+	/*find the longest increasing subsequence in O(nlogn)*/
+
+	
+
+    int L = 0; //the longest length so far;
+
+    int * p = malloc(size*sizeof(int)); 
+
+    int * b = malloc(size*sizeof(int)); // indeces;
+
+    for (i=0;i<size;i++) {
+
+
+    }
 
 }
