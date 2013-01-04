@@ -97,7 +97,7 @@ int main() {
 
 	
 
-	printf("the result is %d\n",*(scores+size-1));
+	printf("%d\n",*(scores+size-1));
 
 
 }
