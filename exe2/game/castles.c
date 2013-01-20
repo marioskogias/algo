@@ -46,46 +46,93 @@ int main() {
 
 	int minimum, sum1,sum2;
 
-
+	int hbeg,hend; // temporary anti gia k 
+	int sumleft,sumright;
+	int presumleft=0,presumright=0;
+	int found = 0;
 	for (l=3;l<=size;l++) {
 		
 		//printf("%d\n",l);
 		for (i=0;i<=size-l;i++) {  // i η αρχή του διαστήματος που κόβουμε
-
+			
 
 			end = i+l-1;
 					//	printf("the start is %d and the end is %d\n",i,end);
 
 			minimum = 0;
-
-			for (k=0;k<=end-1;k++) {
-
-				sum1 = 0;
-				sum2 = 0;
-
+			
+			found = 0;
+		//	for (k=0;k<=end-1;k++) {
+			hbeg = i;
+			hend = end;
+			while(hbeg<=hend) {
+				
+//				presumleft=sumleft;
+//				presumright = sumright;
 			//	printf("k = %d\n",k);*/
-
+				k = (hend+hbeg)/2;
 				
 
-				sum1 = sums[k+1] - sums[i]; 
+				sumleft = sums[k+1] - sums[i]; 
 
 				if (i!=k)		// prosoxh
-					sum1 = sum1 + *(scores+i*size+k);
+					sumleft = sumleft + *(scores+i*size+k);
 
 				//printf("sum1 = %d\n",sum1);
 
 
-				sum2 = sums[end+1] - sums[k+1]; 
+				sumright = sums[end+1] - sums[k+1]; 
 
 				if ((k+1)!=end)
-					sum2 = sum2 + *(scores+(k+1)*size+end);
+					sumright = sumright + *(scores+(k+1)*size+end);
 
-						//		printf("sum2 = %d\n",sum2);
+				
+				//		printf("sum2 = %d\n",sum2);
+			
 
-				if (minimum < min(sum1,sum2)) 
-					minimum = min(sum1,sum2);	
+				if (sumleft<sumright) 
+					hbeg = k+1;
+				else if (sumleft>sumright)
+					hend = k-1;
+				else {	
+					found = 1;
+					break;
+				}
 			}
+			
+			
+			if (found) {
+				minimum = min(sumleft,sumright);
+			} else {
 
+				presumleft = sums[hend+1] - sums[i]; 
+
+				if (i!=hend)               // prosoxh
+					presumleft = presumleft + *(scores+i*size+hend);
+
+				//printf("sum1 = %d\n",sum1);
+
+
+				presumright = sums[end+1] - sums[hend+1]; 
+
+				if ((hend+1)!=end)
+					presumright = presumright + *(scores+(hend+1)*size+end);
+
+				sumleft = sums[hbeg+1] - sums[i]; 
+
+				if (i!=hbeg)               // prosoxh
+					presumleft = presumleft + *(scores+i*size+hbeg);
+
+				//printf("sum1 = %d\n",sum1);
+
+
+				presumright = sums[end+1] - sums[hbeg+1]; 
+
+				if ((hbeg+1)!=end)
+					presumright = presumright + *(scores+(hbeg+1)*size+end);
+				
+				minimum = max(min(presumleft,presumright),min(sumleft,sumright));
+			}
 			*(scores+i*size+end) = minimum; 
 
 			//printf("inserted %d\n",minimum);
