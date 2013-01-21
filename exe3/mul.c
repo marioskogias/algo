@@ -89,6 +89,39 @@ int main() {
 	for (i=0;i<4;i++)
 		printf("%d\n",*(c+i));*/
 
+	int k,N,M,i,x,y,start,end;
+	
+	scanf("%d",&k); // επίπεδα
+	scanf("%d",&N); // αιθουσες ανα επίπεδο
+	scanf("%d",&M); // διάδρομοι 
+	scanf("%d",&start);
+	scanf("%d",&end);
+	
+
+	int * table = calloc(N*N,sizeof(int));
+
+	for(i=0;i<M;i++) {
+		scanf("%d %d",&y,&x);
+		*(table+N*(y-1)+(x-1)) = 1; 
+	}
+
+	for (i=1;i<=N*N;i++) {
+		printf("%d ",*(table+i-1));
+		if(i%N == 0) printf("\n");
+	}
+
+	printf("---------\n");
+
+	int *res = fastPowerMatrix(table,N,k-1);
+
+	for (i=1;i<=N*N;i++) {
+		printf("%d ",*(res+i-1));
+		if(i%N == 0) printf("\n");
+	}	
+
+
+
+
 
 	
 
