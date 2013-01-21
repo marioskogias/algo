@@ -1,15 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void matrixMul(int * a, int * b, int * res, int size) { // η res πρέπει να είναι αρχικοποιημένη
-	int i,j,k,temp1, temp2;
+void matrixMul(long long int  * a, long long int  * b, long long int  * res, long long int  size) { // η res πρέπει να είναι αρχικοποιημένη
+	long long int  i,j,k,temp1, temp2;
 	 
 	for (i=0;i<size;i++) {
 		temp1 = 0;
 		for (k=0;k<size;k++) {
 			temp1 = 0;
 			for(j=0;j<size;j++) {
-				temp2 = *(a+i*size+j)* (*(b+j*size+k));
+				temp2 = (*(a+i*size+j) % 100000007) * (*(b+j*size+k) % 100000007);
+				printf("%lld * %lld = %lld\n",*(a+i*size+j) % 100000007,*(b+j*size+k) % 100000007,temp2);
 				temp1 = temp1+temp2;
 			}
 			*(res+i*size+k) = temp1;
@@ -18,8 +19,8 @@ void matrixMul(int * a, int * b, int * res, int size) { // η res πρέπει �
 	
 }
 
-int fastpower(int a,int n) {
-	int result = 1;
+long long int  fastpower(long long int  a,long long int  n) {
+	long long int  result = 1;
 	while (n>0)  {
 		if (n&1) 
 			result=result*a;
@@ -29,15 +30,15 @@ int fastpower(int a,int n) {
 	return result;	
 }
 
-int * fastPowerMatrix(int *a,int size,int power) { 
+long long int  * fastPowerMatrix(long long int  *a,long long int  size,long long int  power) { 
 	
 	int i;
-	int * temp;
-	int *tempTable = calloc(size*size,sizeof(int));  //αρχικοποίηση σε μοναδιαίο πίνακα
+	long long int  * temp;
+	long long int  *tempTable = calloc(size*size,sizeof(long long int ));  //αρχικοποίηση σε μοναδιαίο πίνακα
 	for (i=0;i<size;i++)
 		*(tempTable+i*size+i)=1;
 
-	int * res = calloc(size*size,sizeof(int));  //αρχικοποίηση σε μοναδιαίο πίνακα
+	long long int  * res = calloc(size*size,sizeof(long long int ));  //αρχικοποίηση σε μοναδιαίο πίνακα
 	for (i=0;i<size;i++)
 		*(res+i*size+i)=1;
 	
@@ -62,21 +63,21 @@ int * fastPowerMatrix(int *a,int size,int power) {
 
 }
 
-int main() {
-	/*int i;
-	int a[4];
+int  main() {
+	/*long long int  i;
+	long long int  a[4];
 	a[0] = 1;
 	a[1] = 2;
 	a[2] = 3;
 	a[3] = 4;
-	int * c;
+	long long int  * c;
 	
 	
 
 	
 	
 	
-	int * d = malloc(4*sizeof(int));
+	long long int  * d = malloc(4*sizeof(long long int ));
 
 	matrixMul(a,a,d,2);
 	for (i=0;i<4;i++)
@@ -89,16 +90,18 @@ int main() {
 	for (i=0;i<4;i++)
 		printf("%d\n",*(c+i));*/
 
-	int k,N,M,i,x,y,start,end;
+	int  k,N,M,i,x,y,start,end;
 	
 	scanf("%d",&k); // επίπεδα
 	scanf("%d",&N); // αιθουσες ανα επίπεδο
 	scanf("%d",&M); // διάδρομοι 
 	scanf("%d",&start);
 	scanf("%d",&end);
+
+
 	
 
-	int * table = calloc(N*N,sizeof(int));
+	long long int  * table = calloc(N*N,sizeof(long long int ));
 
 	for(i=0;i<M;i++) {
 		scanf("%d %d",&y,&x);
@@ -106,16 +109,16 @@ int main() {
 	}
 
 	for (i=1;i<=N*N;i++) {
-		printf("%d ",*(table+i-1));
+		printf("%lld ",*(table+i-1));
 		if(i%N == 0) printf("\n");
 	}
 
+	
+
+	long long int  *res = fastPowerMatrix(table,N,k-2);
 	printf("---------\n");
-
-	int *res = fastPowerMatrix(table,N,k-1);
-
 	for (i=1;i<=N*N;i++) {
-		printf("%d ",*(res+i-1));
+		printf("%lld ",*(res+i-1));
 		if(i%N == 0) printf("\n");
 	}	
 
