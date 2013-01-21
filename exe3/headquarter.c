@@ -9,11 +9,12 @@ void matrixMul(long long int  * a, long long int  * b, long long int  * res, lon
 		for (k=0;k<size;k++) {
 			temp1 = 0;
 			for(j=0;j<size;j++) {
-				temp2 = (*(a+i*size+j) % 100000007) * (*(b+j*size+k) % 100000007);
+			//	temp2 = (*(a+i*size+j) % 100000007) * (*(b+j*size+k) % 100000007);
+				temp2 = *(a+i*size+j) * (*(b+j*size+k)) ;
 			//	printf("%lld * %lld = %lld\n",*(a+i*size+j) % 100000007,*(b+j*size+k) % 100000007,temp2);
 				temp1 = temp1+temp2;
 			}
-			*(res+i*size+k) = temp1;
+			*(res+i*size+k) = temp1 % 100000007;
 		}	
 	}
 	
@@ -65,37 +66,7 @@ long long int  * fastPowerMatrix(long long int  *a,long long int  size,long long
 }
 
 int  main() {
-/*	long long int  i;
-	long long int  a[4];
-	a[0] = 1;
-	a[1] = 2;
-	a[2] = 3;
-	a[3] = 4;
 
-	long long int  b[4];
-	b[0] = 7;
-	b[1] = 10;
-	b[2] = 15;
-	b[3] = 22;
-	long long int  * c  = malloc(4*sizeof(long long int));
-	
-
-	
-	matrixMul(a,b,c,2);
-	printf("the last\n");
-	for (i=1;i<=4;i++) {
-		printf("%lld ",*(c+i-1));
-		if(i%2 == 0) printf("\n");
-	}
-	printf("----------\n"); 
-	long long int * d = fastPowerMatrix(a,2,3);
-
-	printf("-------\n");
-
-	for (i=1;i<=4;i++) {
-		printf("%lld ",*(d+i-1));
-		if(i%2 == 0) printf("\n");
-	}*/
 	int  k,N,M,i,x,y,start,end;
 	
 	scanf("%d",&k); // επίπεδα
@@ -116,7 +87,7 @@ int  main() {
 
 	long long int  *res = fastPowerMatrix(table,N,k-1);
 
-	printf("%lld mine\n",*(res+(start-1)*N+(end-1)));	
+	printf("%lld\n",*(res+(start-1)*N+(end-1)));	
 
 
 
