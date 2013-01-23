@@ -11,7 +11,7 @@
 
 struct node {
 	int parent;
-	int size;
+	long long int size;
 } ;
 
 struct edge {
@@ -121,7 +121,7 @@ int main() {
 	int val2;
 	int error = 0;
 	long long int temp;
-	long long int temppre=0;
+	long long int temp2,temp3;
 	for (i=0;i<(nodesNo-1);i++) {
 		val1 = findTreePathCompression(edges[i].s,nodes);
 		val2 = findTreePathCompression(edges[i].e,nodes);
@@ -137,21 +137,19 @@ int main() {
 			sum = sum +  temp;
 		}
 		else {
-			sum = sum + edges[i].w;
-			temp = nodes[val1].size*nodes[val2].size; 
-			temp-- ;
-			temp = temp * (edges[i].w + 1 ) ;
-			sum = sum + temp;
+			temp =  1 + edges[i].w;
+			temp2 = nodes[val1].size*nodes[val2].size; 
+			temp3 = temp*temp2;
+			temp3--;
+			sum = sum + temp3;
+			
 		}   	
 
 		unionTree(val1,val2,nodes);
-		if (sum < temppre) {
-			error = 1;
-			break;
-		}
-		temppre = sum;
+		
+		
 	}
-	printf("error %d\n",error);
+	printf("%lld\n",sum);
 
 
 
