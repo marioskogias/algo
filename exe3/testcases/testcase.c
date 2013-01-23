@@ -91,7 +91,7 @@ int main() {
 
 	int nodesNo;
 
-	unsigned long long int sum = 0;  // το τελικό βάρος της εξόδου
+	long long int sum = 0;  // το τελικό βάρος της εξόδου
 
 	scanf("%d",&nodesNo);
 
@@ -119,7 +119,9 @@ int main() {
 	randomQuickSort(edges,0,nodesNo-2);
 	int val1;
 	int val2;
-	unsigned long long int temp;
+	int error = 0;
+	long long int temp;
+	long long int temppre=0;
 	for (i=0;i<(nodesNo-1);i++) {
 		val1 = findTreePathCompression(edges[i].s,nodes);
 		val2 = findTreePathCompression(edges[i].e,nodes);
@@ -130,19 +132,26 @@ int main() {
 			
 		else if ((nodes[val1].size == 1) || (nodes[val2].size == 1))  {// αν κάποιο άκρο σε μόνο του κόμβο
 			sum = sum + edges[i].w;
-			sum = sum + (max(nodes[val1].size,nodes[val2].size)-1)*(edges[i].w + 1);
+			temp =  max(nodes[val1].size,nodes[val2].size)-1;
+			temp = temp *(edges[i].w + 1);
+			sum = sum +  temp;
 		}
 		else {
 			sum = sum + edges[i].w;
-			temp = nodes[val1].size*nodes[val2].size -1 ;
+			temp = nodes[val1].size*nodes[val2].size; 
+			temp-- ;
 			temp = temp * (edges[i].w + 1 ) ;
 			sum = sum + temp;
 		}   	
 
 		unionTree(val1,val2,nodes);
+		if (sum < temppre) {
+			error = 1;
+			break;
+		}
+		temppre = sum;
 	}
-
-	printf("%llu\n",sum);
+	printf("error %d\n",error);
 
 
 
