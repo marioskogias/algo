@@ -182,7 +182,7 @@ int main() {
 	
 	Insert(Q, 1, 0);
 
-	for(i=2;i<=nodeNo;i++) {
+	for(i=2;i<=nodeNo+1;i++) {
 		Insert(Q,i,20001);	
 	}
 
@@ -192,7 +192,7 @@ int main() {
 	/*edges*/
 	struct edge ** edges = calloc(nodeNo+2,sizeof(struct edge *));
 	
-	struct edge * t;
+	
 	for (i=0;i<m;i++) { // δηιουργία λίστας γειτνίασης
 		scanf("%d %d %d",&head,&tail,&distance);
 		head++;
@@ -200,23 +200,6 @@ int main() {
 		insertEdge(edges,head,tail,distance);
 		insertEdge(edges,tail,head,distance);
 
-	for (k=2;k<=nodeNo+1;k++) {
-
-		t = edges[k];
-		printf("%d, ",k);
-		if (t==NULL)
-			printf("not yet");
-		else {
-			while (t!=NULL) {
-				printf("%d ",t->tail);
-				t=t->next;
-			}	
-		}
-		
-
-		printf("\n");
-
-	}
 	}	
 
 	
@@ -224,13 +207,31 @@ int main() {
 	
 	/*route*/
 
-/*	int * route = malloc(k*sizeof(int));
-	for (i=0;i<k;i++)
-		scanf("%d",route+i);*/
+	int * route = malloc(k*sizeof(int));
+	for (i=0;i<k;i++) {
+		scanf("%d",route+i);
+		*(route+i) = *(route+i) + 1;
+	}
+		
+
+	
+	/*route length without stops*/
+	int sum=0;
+	
+	struct edge * t;
+	for (i=0;i<k-1;i++) {
+		printf("%d\n",route[i]);
+		t = edges[route[i]];
+		while(t->tail!=route[i+1])
+			t=t->next;
+		sum = sum + t->length;
+
+		printf("the sum is %d\n",sum);
+	}
 
 	/*βενζινάδικα*/
 
-	/*for (i=0;i<b;i++) { // εισαγωγή ακμών με μηδενικό βάρος
+	for (i=0;i<b;i++) { // εισαγωγή ακμών με μηδενικό βάρος
 		scanf("%d",&tail);
 		insertEdge(edges,1,tail+1,0);
 		insertEdge(edges,tail+1,1,0);
@@ -238,7 +239,7 @@ int main() {
 	}
 
 	
-
+	/*
 	for (i=1;i<=nodeNo+1;i++) {
 
 		t = edges[i];
@@ -250,8 +251,8 @@ int main() {
 
 		printf("\n");
 
-	}
-	/*struct edge * temp1;
+	}*/
+	struct edge * temp1;
 
 	
 
@@ -276,7 +277,24 @@ int main() {
 	}
 	printf("done with the loop\n");
 
-	randomQuickSort(Q,1,nodeNo+1);*/
+	struct node * D = malloc(k*sizeof(struct node));
+
+	for (i=0;i<k-2;i++){
+		D[i].name = Q[place[route[i+1]]].name;
+		D[i].distance = Q[place[route[i+1]]].distance;
+	}
+
+	randomQuickSort(D,0,k-3);
+
+	printf("after sorting\n");
+	for (j=0;j<k-2;j++) 
+			printf("node %d distance %d\n",D[j].name, D[j].distance);
+
+	for (i=0;i<l;i++)
+		sum = sum + D[i].distance;
+
+	printf("the result is %d\n",sum);
+
 
 	
 
