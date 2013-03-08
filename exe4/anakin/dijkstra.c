@@ -1,6 +1,30 @@
 #include <stdio.h>
 #include "stdlib.h"
 
+/*read fast*/
+#define BSIZE 1<<15
+
+char buffer[BSIZE];
+long bpos = 0L, bsize = 0L;
+
+long readLong() 
+{
+	long d = 0L, x = 0L;
+	char c;
+
+	while (1)  {
+		if (bpos >= bsize) {
+			bpos = 0;
+			if (feof(stdin)) return x;
+			bsize = fread(buffer, 1, BSIZE, stdin);
+		}
+		c = buffer[bpos++];
+		if (c >= '0' && c <= '9') { x = x*10 + (c-'0'); d = 1; }
+		else if (d == 1) return x;
+	}
+	return -1;
+}
+
 /*nodes and edges*/
 
 struct node {
@@ -77,7 +101,7 @@ void Insert(struct node *Q, int x,int k) {
 	keys[x] = k;
 	place[x] = n;
 	DecreaseKey(Q, x, k);
-	printf("insertion\n");
+	//printf("insertion\n");
 }
 
 
@@ -106,7 +130,7 @@ void insertEdge(struct edge ** e,int h,int t,int d) {
 		
 		if (temp1 == NULL) {
 			e[h] = temp;
-			printf("is NULL\n");
+		//	printf("is NULL\n");
 		}
 		else {
 		
@@ -118,7 +142,7 @@ void insertEdge(struct edge ** e,int h,int t,int d) {
 
 		}
 
-		printf("insert %d %d with distance %d\n",h,t,d);
+		//printf("insert %d %d with distance %d\n",h,t,d);
 
 
 }
@@ -172,8 +196,12 @@ void randomQuickSort(struct node * A, int left, int right) {
 
 int main() {
 	int m,k,l,b,i,nodeNo; 
-	scanf("%d %d %d %d %d",&nodeNo,&m,&k,&l,&b); //nodeNo, roadsno, k  η διαδρομή, l οι ανεφοδιασμοί, b τα βενζινάδικα
-	
+	//scanf("%d %d %d %d %d",&nodeNo,&m,&k,&l,&b); //nodeNo, roadsno, k  η διαδρομή, l οι ανεφοδιασμοί, b τα βενζινάδικα
+	nodeNo = readLong();
+	m = readLong();
+	k = readLong();
+	l = readLong();
+	b = readLong();
 
 	/*nodes*/
 	keys = malloc((nodeNo+2)*sizeof(int));
@@ -194,7 +222,10 @@ int main() {
 	
 	
 	for (i=0;i<m;i++) { // δηιουργία λίστας γειτνίασης
-		scanf("%d %d %d",&head,&tail,&distance);
+		//scanf("%d %d %d",&head,&tail,&distance);
+		head = readLong();
+		tail = readLong();
+		distance = readLong();
 		head++;
 		tail++;
 		insertEdge(edges,head,tail,distance);
@@ -209,7 +240,8 @@ int main() {
 
 	int * route = malloc(k*sizeof(int));
 	for (i=0;i<k;i++) {
-		scanf("%d",route+i);
+		//scanf("%d",route+i);
+		*(route+i)=readLong();
 		*(route+i) = *(route+i) + 1;
 	}
 		
@@ -220,22 +252,23 @@ int main() {
 	
 	struct edge * t;
 	for (i=0;i<k-1;i++) {
-		printf("%d\n",route[i]);
+	//	printf("%d\n",route[i]);
 		t = edges[route[i]];
 		while(t->tail!=route[i+1])
 			t=t->next;
 		sum = sum + t->length;
 
-		printf("the sum is %d\n",sum);
+	//	printf("the sum is %d\n",sum);
 	}
 
 	/*βενζινάδικα*/
 
 	for (i=0;i<b;i++) { // εισαγωγή ακμών με μηδενικό βάρος
-		scanf("%d",&tail);
+		//scanf("%d",&tail);
+		tail = readLong();
 		insertEdge(edges,1,tail+1,0);
 		insertEdge(edges,tail+1,1,0);
-		printf("benzin\n");
+	//	printf("benzin\n");
 	}
 
 	
@@ -271,11 +304,11 @@ int main() {
 		}
 
 		//free(p);
-		for (j=1;j<=nodeNo;j++) 
+		/*for (j=1;j<=nodeNo;j++) 
 			printf("node %d distance %d\n",Q[j].name, Q[j].distance);
-		printf("\n");
+		printf("\n");*/
 	}
-	printf("done with the loop\n");
+	//printf("done with the loop\n");
 
 	struct node * D = malloc(k*sizeof(struct node));
 
@@ -286,9 +319,9 @@ int main() {
 
 	randomQuickSort(D,0,k-3);
 
-	printf("after sorting\n");
+	/*printf("after sorting\n");
 	for (j=0;j<k-2;j++) 
-			printf("node %d distance %d\n",D[j].name, D[j].distance);
+			printf("node %d distance %d\n",D[j].name, D[j].distance);*/
 
 	for (i=0;i<l;i++)
 		sum = sum + D[i].distance;
