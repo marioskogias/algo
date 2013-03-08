@@ -105,17 +105,22 @@ void insertEdge(struct edge ** e,int h,int t,int d) {
 		temp1 = e[h];
 		
 		if (temp1 == NULL) {
-			printf("is NULL\n");
 			e[h] = temp;
+			printf("is NULL\n");
 		}
 		else {
-			temp2 = temp1;
+		
 			while(temp1 != NULL) {
 				temp2 = temp1;
 				temp1 = temp1->next;
 			}
 			temp2->next = temp;	
+			printf("%d next\n",temp2->next);
+			printf("%d six\n",e[6]);
+
 		}
+
+		printf("insert %d %d with distance %d\n",h,t,d);
 
 
 }
@@ -171,6 +176,7 @@ int main() {
 	int m,k,l,b,i,nodeNo; 
 	scanf("%d %d %d %d %d",&nodeNo,&m,&k,&l,&b); //nodeNo, roadsno, k  η διαδρομή, l οι ανεφοδιασμοί, b τα βενζινάδικα
 	
+
 	/*nodes*/
 	keys = malloc((nodeNo+2)*sizeof(int));
 	place = malloc((nodeNo+2)*sizeof(int));
@@ -188,32 +194,66 @@ int main() {
 	/*edges*/
 	struct edge ** edges = calloc(nodeNo,sizeof(struct edge *));
 	
+	struct edge * t;
 	for (i=0;i<m;i++) { // δηιουργία λίστας γειτνίασης
 		scanf("%d %d %d",&head,&tail,&distance);
 		head++;
 		tail++;
 		insertEdge(edges,head,tail,distance);
 		insertEdge(edges,tail,head,distance);
+
+	for (k=2;k<=nodeNo+1;k++) {
+
+		t = edges[k];
+		printf("%d, ",k);
+		if (t==NULL)
+			printf("not yet");
+		else {
+			while (t!=NULL) {
+				printf("%d ",t->tail);
+				t=t->next;
+			}	
+		}
+		
+
+		printf("\n");
+
+	}
 	}	
+
+	
 
 	
 	/*route*/
 
-	int * route = malloc(k*sizeof(int));
+/*	int * route = malloc(k*sizeof(int));
 	for (i=0;i<k;i++)
-		scanf("%d",route+i);
+		scanf("%d",route+i);*/
 
 	/*βενζινάδικα*/
 
-	for (i=0;i<b;i++) { // εισαγωγή ακμών με μηδενικό βάρος
+	/*for (i=0;i<b;i++) { // εισαγωγή ακμών με μηδενικό βάρος
 		scanf("%d",&tail);
-		insertEdge(edges,1,tail,0);
-		insertEdge(edges,tail,1,0);
+		insertEdge(edges,1,tail+1,0);
+		insertEdge(edges,tail+1,1,0);
+		printf("benzin\n");
 	}
 
+	
 
+	for (i=1;i<=nodeNo+1;i++) {
 
-	struct edge * temp1;
+		t = edges[i];
+		printf("%d, ",i);
+		while (t!=NULL) {
+			printf("%d ",t->tail);
+			t=t->next;
+		}
+
+		printf("\n");
+
+	}
+	/*struct edge * temp1;
 
 	
 
@@ -232,12 +272,15 @@ int main() {
 		}
 
 		//free(p);
-		//for (j=1;j<=nodeNo;j++) 
-		//	printf("node %d distance %d\n",Q[j].name, Q[j].distance);
+		for (j=1;j<=nodeNo;j++) 
+			printf("node %d distance %d\n",Q[j].name, Q[j].distance);
+		printf("\n");
 	}
 	printf("done with the loop\n");
 
-	randomQuickSort(Q,1,nodeNo+1);
+	randomQuickSort(Q,1,nodeNo+1);*/
+
+	
 
 
 
