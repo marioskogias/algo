@@ -115,8 +115,6 @@ void insertEdge(struct edge ** e,int h,int t,int d) {
 				temp1 = temp1->next;
 			}
 			temp2->next = temp;	
-			printf("%d next\n",temp2->next);
-			printf("%d six\n",e[6]);
 
 		}
 
@@ -192,7 +190,7 @@ int main() {
 	int head,tail,distance;
 
 	/*edges*/
-	struct edge ** edges = calloc(nodeNo,sizeof(struct edge *));
+	struct edge ** edges = calloc(nodeNo+2,sizeof(struct edge *));
 	
 	struct edge * t;
 	for (i=0;i<m;i++) { // δηιουργία λίστας γειτνίασης
