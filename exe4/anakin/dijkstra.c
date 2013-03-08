@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "stdlib.h"
 
+/*nodes and edges*/
+
 struct node {
 	int name;
 	int distance;
@@ -23,7 +25,7 @@ struct node *  EmptyQ(int count) {
 }
 
 
-
+/*binary heap*/
 void swap(struct node * q1,struct node * q2) {
 	int na = q1->name;
 	int dis = q1->distance;
@@ -118,16 +120,60 @@ void insertEdge(struct edge ** e,int h,int t,int d) {
 
 }
 
+/*random quicksort*/
+
+void swapSort(struct node * a, struct node * b) {
+	struct node temp;
+	
+	temp.name = a->name;
+	temp.distance = a->distance;
+	
+
+	a->name = b->name;
+	a->distance = b->distance;
+	
+
+	b->name = temp.name;
+	b->distance = temp.distance;
+	
+}
+
+
+int partition(struct node A[], int left, int right) {  // sel 0 for men sel 1 for women 
+ 	
+ 	int pivot;
+
+ 	pivot = A[left].distance ; 
+ 	int i = left -1;
+	int j = right + 1; 
+	while (1) {
+		while (A[++i].distance < pivot) ;
+		while (A[--j].distance > pivot) ;
+		if (i < j) 
+			swapSort(A+i, A+j);
+		else return(j); 
+	}
+ 	 		
+}
+
+void randomQuickSort(struct node * A, int left, int right) {
+	if (left >= right) return; // At most 1 element
+	int pivot = (rand() % (right-left)) + left ; // random pivot in range (left,right)
+	swapSort(A+left, A+pivot);
+	int q = partition(A, left, right);
+	randomQuickSort(A, left, q);
+	randomQuickSort(A, q+1, right); 
+}
+
 
 
 int main() {
-	int m,k,l,b,i,nodeNo;
-	//scanf("%d %d %d %d %d",&n,&m,&k,&l,&b);
-	printf("Give no of nodes and no of edges\n");
-	scanf("%d %d",&nodeNo,&m);
-//	int * D = malloc(n*sizeof(int));
-	keys = malloc((nodeNo+1)*sizeof(int));
-	place = malloc((nodeNo+1)*sizeof(int));
+	int m,k,l,b,i,nodeNo; 
+	scanf("%d %d %d %d %d",&nodeNo,&m,&k,&l,&b); //nodeNo, roadsno, k  η διαδρομή, l οι ανεφοδιασμοί, b τα βενζινάδικα
+	
+	/*nodes*/
+	keys = malloc((nodeNo+2)*sizeof(int));
+	place = malloc((nodeNo+2)*sizeof(int));
 	struct node * Q = EmptyQ(nodeNo+1);
 	
 	Insert(Q, 1, 0);
@@ -136,35 +182,47 @@ int main() {
 		Insert(Q,i,20001);	
 	}
 
-	for (i=1;i<=n;i++) 
-		printf("node %d distance %d\n",Q[i].name, Q[i].distance);
 	
 	int head,tail,distance;
 
+	/*edges*/
 	struct edge ** edges = calloc(nodeNo,sizeof(struct edge *));
 	
 	for (i=0;i<m;i++) { // δηιουργία λίστας γειτνίασης
-		printf("Give edge head tail length\n");
 		scanf("%d %d %d",&head,&tail,&distance);
 		head++;
 		tail++;
 		insertEdge(edges,head,tail,distance);
 		insertEdge(edges,tail,head,distance);
-		//printf("%d %d %d\n",head,e->tail,e->length);
-		
 	}	
 
-	printf("created list\n");
+	
+	/*route*/
+
+	int * route = malloc(k*sizeof(int));
+	for (i=0;i<k;i++)
+		scanf("%d",route+i);
+
+	/*βενζινάδικα*/
+
+	for (i=0;i<b;i++) { // εισαγωγή ακμών με μηδενικό βάρος
+		scanf("%d",&tail);
+		insertEdge(edges,1,tail,0);
+		insertEdge(edges,tail,1,0);
+	}
+
+
+
 	struct edge * temp1;
 
-	printf("nodeNo = %d\n",nodeNo);
+	
 
 		
 	int j;
 	struct node * p;
 	for (i=1;i<=nodeNo;i++) {
 		p = ExtractMin(Q);
-		printf("extracted %d\n",p->name);
+		//printf("extracted %d\n",p->name);
 	//	D[p->name] = p->distance;
 		temp1 = edges[p->name];
 		while (temp1!=NULL) {
@@ -174,12 +232,13 @@ int main() {
 		}
 
 		//free(p);
-		for (j=1;j<=nodeNo;j++) 
-			printf("node %d distance %d\n",Q[j].name, Q[j].distance);
+		//for (j=1;j<=nodeNo;j++) 
+		//	printf("node %d distance %d\n",Q[j].name, Q[j].distance);
 	}
 	printf("done with the loop\n");
 
-	for(i=1;i<=nodeNo;i++)
-		printf("%d\n",keys[i]);
+	randomQuickSort(Q,1,nodeNo+1);
+
+
 
 }
