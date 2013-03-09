@@ -32,55 +32,74 @@ struct node {
 };
 
 /*queue functions*/
-void push(struct node ** list,int node) {
+void enqueue(struct node ** listEnd,struct node ** list,int node) {
 	
 	struct node * n = malloc(sizeof(struct node));
 	n->no = node;
-	n->next = *list;
-	*list = n;
+	n->next = NULL;
+	if (*listEnd != NULL)
+		(*listEnd)->next = n;
+	*listEnd = n;
+	if (*list==NULL)
+		*list = *listEnd;
 }
 
-int pop(struct node ** list) {
+int dequeue(struct node ** list,struct node ** listEnd) {
 
 	int no = (*list)->no;
 	struct node * m = *list;
 	*list = (*list)->next;
-	if (m == NULL) 
-		printf("poped NULL\n");
 	free(m);
+	if (*list = NULL)
+		*listEnd == NULL;
 	return no;
 
 }
 
 /*the bfs*/
-int dfs(struct node ** table,int node,int nodeNo) {
-	
+int bfs(struct node ** table,int node,int nodeNo,int * v) {
+
 	struct node ** list = malloc(sizeof(struct node *));
-	int * visited = calloc(nodeNo,sizeof(int));
+	struct node ** listEnd = malloc(sizeof(struct node *));
+	*list = NULL;
+	*listEnd = NULL;
+	int * visited;
+	if (v==NULL) 
+		visited = calloc(nodeNo,sizeof(int));
+	else 
+		visited = v;
+
 	struct node * temp;
-	push(list,node);
+	enqueue(listEnd,list,node);
 	int n;
 	while((*list)!=NULL) {
-		n = pop(list);
-		printf("just poped %d\n",n);
-		if (!visited[n]) {
-			printf("%d\n",n);
-			temp = table[n];
-			while(temp!=NULL) {
-				push(list,temp->no);
-				printf("just pushed %d\n",temp->no);
+		//printf("stack in loop1\n");
+		n = dequeue(list,listEnd);
+	//	printf("just poped %d\n",n);
+	//	printf("%d\n",n);
+		temp = table[n];
+		while(temp!=NULL) {
+			if (!visited[temp->no]) {
+				enqueue(listEnd,list,temp->no);
+				//	printf("stack in loop2\n");
+				//printf("just pushed %d\n",temp->no);
+				}
 				temp = temp->next;
-			}
-			visited[n] = 1;
+			
 		}
+		visited[n] = 1;
+
 
 	}
-	int i,count = 0;
+	int i,info = -1;
 	for(i=0;i<nodeNo;i++) 
-		if (visited[i]==0) 
-			count++;
+		if (visited[i]==0){
+			info =i;
+			break;
+		}
 			
-	return count;
+			
+	return info;
 }
 
 void insert(struct node ** e,int h,int t) {
@@ -101,6 +120,9 @@ void insert(struct node ** e,int h,int t) {
                         while(temp1 != NULL) {
                                 temp2 = temp1;
                                 temp1 = temp1->next;
+		//		printf("stack in loop3\n");
+	
+	
                         }
                         temp2->next = temp;
 
@@ -129,35 +151,24 @@ int main() {
 		}
 
 	}
+	/*now the real thing*/
+/*	i = rand() % nodeNo;
+	k = bfs(list,i,nodeNo,NULL);
+	while(k!=-1) {
+
+	//	printf("stack in loop4\n");
+		i = k; 
+		k = bfs(list,i,nodeNo,NULL);
+	}
 	
-/*	printf("the structure is \n");
-	for (i=0;i<nodeNo;i++) {
-		t = list[i];
-		while(t!=NULL) {
-			printf("%d ",t->no);
-			t=t->next;
-		}
-		printf("\n");
-	}*/
-	printf("the result is %d\n",dfs(list,1,nodeNo));
-/*	printf("the structure is \n");
-	for (i=0;i<nodeNo;i++) {
-		t = list[i];
-		while(t!=NULL) {
-			printf("%d ",t->no);
-			t=t->next;
-		}
-		printf("\n");
-	}
-	printf("let's see\n");*/
-	printf("the result is %d\n",dfs(list,1,nodeNo));
-	/*i = rand() % nodeNo;
-	printf("now with i = %d\n",i);	
-	while(bfs(list,i,nodeNo)!=0){ 
-		i = rand() % nodeNo;
-		printf("now with i = %d\n",i);	
-	}
-	printf("after the first'\n");
-	printf("the result is %d\n",bfs(list,0,nodeNo));
+	int * visited = calloc(nodeNo,sizeof(int));
+
+	bfs(inverseList,i,nodeNo,visited);
+	
+	int count=0;
+	for (i=0;i<nodeNo;i++)
+		if (!visited[i])
+			count++;
+	printf("the result is %d\n",count);
 */
 }
