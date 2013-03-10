@@ -57,7 +57,7 @@ void insert(struct node ** e,int h,int t) {
     struct node * temp = malloc(sizeof(struct node));
     temp->no = t;
     temp->next = e[h];
-	e[h] = temp;
+		e[h] = temp;
 
 }
 
