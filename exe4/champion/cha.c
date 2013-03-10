@@ -2,7 +2,9 @@
 #include <stdlib.h>
 /*read fast*/
 #define BSIZE 1<<15
-
+#ifndef min
+        #define min( a, b ) ( ((a) < (b)) ? (a) : (b) )
+#endif
 char buffer[BSIZE];
 long bpos = 0L, bsize = 0L;
 
@@ -31,70 +33,23 @@ struct node {
 
 };
 
-/*queue functions*/
-void enqueue(struct node ** listEnd,struct node ** list,int node) {
+/*stack functions*/
+void push(struct node ** list,int node) {
 	
 	struct node * n = malloc(sizeof(struct node));
 	n->no = node;
 	n->next = NULL;
-	if (*listEnd != NULL)
-		(*listEnd)->next = n;
-	*listEnd = n;
-	if (*list==NULL)
-		*list = *listEnd;
+	*list = n;
 }
 
-int dequeue(struct node ** list,struct node ** listEnd) {
+int pop(struct node ** list) {
 
 	int no = (*list)->no;
 	struct node * m = *list;
 	*list = (*list)->next;
 	free(m);
-	if (*list = NULL)
-		*listEnd == NULL;
 	return no;
 
-}
-
-/*the bfs*/
-int bfs(struct node ** table,int node,int nodeNo,int * v) {
-//	printf("bfs from %d\n",node);
-	struct node ** list = malloc(sizeof(struct node *));
-	struct node ** listEnd = malloc(sizeof(struct node *));
-	*list = NULL;
-	*listEnd = NULL;
-	int * visited = calloc(nodeNo,sizeof(int));
-	struct node * temp;
-	enqueue(listEnd,list,node);
-	int n;
-	while((*list)!=NULL) {
-		//printf("stack in loop1\n");
-		n = dequeue(list,listEnd);
-	//	printf("just poped %d\n",n);
-	//	printf("%d\n",n);
-		temp = table[n];
-		while(temp!=NULL) {
-			if (!visited[temp->no]) {
-				enqueue(listEnd,list,temp->no);
-				//	printf("stack in loop2\n");
-	//			printf("just pushed %d\n",temp->no);
-				}
-				temp = temp->next;
-			
-		}
-		visited[n] = 1;
-		v[n] = 1;
-
-	}
-	int i,error = 0;
-	for(i=0;i<nodeNo;i++) 
-		if (visited[i]==0){
-			error = 1;
-			break;
-		}
-			
-			
-	return error;
 }
 
 void insert(struct node ** e,int h,int t) {
@@ -125,12 +80,49 @@ void insert(struct node ** e,int h,int t) {
 
 }
 
+int indexNo = 0;
+int count = 0;
+struct node ** stack ;
+void tarjan(int v,int * index,int * lowLink,struct node **list,int * strong,int * S) {
+	printf("tarjan\n");
+	index[v] = indexNo;
+	lowLink[v] = indexNo;
+	index++;
+	push(stack,v);
+	S[v] = 1;
 
+	struct node * t;
+	t = list[v];
+	
+	while(t!=NULL) {
+		if (index[t->no]==-1) {
+			tarjan(t->no,index,lowLink,list,strong,S);
+			lowLink[v] = min(lowLink[v],lowLink[t->no]);	
+		}
+		else 
+			if (S[t->no]) {
+				lowLink[v] = min(lowLink[v],index[t->no]);
+
+			}
+		t=t->next;
+
+	}
+	int u;	
+	if (lowLink[v] == index[v]) {
+		count++;
+		do {
+			u = pop(stack);
+			S[u] = 0;
+			strong[u] = count;
+
+
+		} while( u != v);
+	}
+}
 int main() {
 
 	int nodeNo = readLong();
 	struct node ** list = calloc(nodeNo,sizeof(struct node *));
-	struct node ** inverseList = calloc(nodeNo,sizeof(struct node *));
 
 	int i,j,k,node;
 	struct node * t;
@@ -139,31 +131,33 @@ int main() {
 		for (j=0;j<k;j++) {
 			node = readLong();
 			insert(list,i,node-1);
-			insert(inverseList,node-1,i);
 		}
 
 	}
 	/*now the real thing*/
-	
-	int * visited = calloc(nodeNo,sizeof(int));
-	i = rand() % nodeNo;
-	k = bfs(list,i,nodeNo,visited);
-	while(k!=0) {
-	//	printf("stack in loop4\n");
-		i = 0;
-		while(visited[i])
-			i++;	
-		k = bfs(list,i,nodeNo,visited);
+	int * index = malloc(nodeNo*sizeof(int));
+	int * lowLink = malloc(nodeNo*sizeof(int));
+	int * S = calloc(nodeNo,sizeof(int));
+	int * strong = calloc(nodeNo,sizeof(int));
+	stack =  malloc(sizeof(struct node *));
+	*stack = NULL;
+	for (i=0;i<nodeNo;i++) 
+		*(index+i) = -1;
+
+
+	for (i=0;i<=nodeNo;i++) {
+		if (index[i] == -1) {
+			tarjan(i,index,lowLink,list,strong,S);
+		}
 	}
-	free(visited);
-	visited = calloc(nodeNo,sizeof(int));
-
-	bfs(inverseList,i,nodeNo,visited);
 	
-	int count=0;
-	for (i=0;i<nodeNo;i++)
-		if (!visited[i])
-			count++;
-	printf("the result is %d\n",count);
+	int count2 = 0;
 
+	for (i=0;i<=nodeNo;i++) {
+		if (strong[i] == count) {
+			count2++;
+		}
+	}
+
+	printf("%d\n", count);
 }
