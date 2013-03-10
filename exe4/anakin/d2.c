@@ -117,28 +117,16 @@ struct node * ExtractMin(struct node * Q){
 }
 	
 
-void insertEdge(struct edge ** e,long int  h,long int  t,long int  d,struct edge ** final) {
-		struct edge * temp1;
-		struct edge * temp2;
+void insertEdge(struct edge ** e,long int  h,long int  t,long int  d) {
+		
 		struct edge * temp = malloc(sizeof(struct edge));
 		
-		temp->next = NULL;
+		
 		temp->tail = t;
 		temp->length = d;
-		temp1 = e[h];
+		temp->next = e[h];
+		e[h] = temp;
 		
-		if (temp1 == NULL) {
-			e[h] = temp;
-			final[h] = temp;
-		
-		}
-		else {
-		
-			final[h]->next = temp;
-			final[h] = temp;
-
-		}
-
 		
 
 
@@ -216,7 +204,7 @@ int  main() {
 	/*edges*/
 	struct edge ** edges = calloc(nodeNo+2,sizeof(struct edge *));
 	
-	struct edge ** finalEdges = calloc(nodeNo+2,sizeof(struct edge *));
+	
 	
 
 	for (i=0;i<m;i++) { // δηιουργία λίστας γειτνίασης
@@ -226,8 +214,8 @@ int  main() {
 		distance = readLong();
 		head++;
 		tail++;
-		insertEdge(edges,head,tail,distance,finalEdges);
-		insertEdge(edges,tail,head,distance,finalEdges);
+		insertEdge(edges,head,tail,distance);
+		insertEdge(edges,tail,head,distance);
 
 	}	
 
@@ -263,8 +251,8 @@ int  main() {
 	for (i=0;i<b;i++) { // εισαγωγή ακμών με μηδενικό βάρος
 		
 		tail = readLong();
-		insertEdge(edges,1,tail+1,0,finalEdges);
-		insertEdge(edges,tail+1,1,0,finalEdges);
+		insertEdge(edges,1,tail+1,0);
+		insertEdge(edges,tail+1,1,0);
 
 	}
 
