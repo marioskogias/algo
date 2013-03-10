@@ -53,30 +53,11 @@ int pop(struct node ** list) {
 }
 
 void insert(struct node ** e,int h,int t) {
-                struct node * temp1;
-                struct node * temp2;
-                struct node * temp = malloc(sizeof(struct node));
-
-                temp->next = NULL;
-                temp->no = t;
-                temp1 = e[h];
-
-                if (temp1 == NULL) {
-                        e[h] = temp;
-                }
-                else {
-
-                        while(temp1 != NULL) {
-                                temp2 = temp1;
-                                temp1 = temp1->next;
-	
-	
-                        }
-                        temp2->next = temp;
-
-                }
-
-
+                
+    struct node * temp = malloc(sizeof(struct node));
+    temp->no = t;
+    temp->next = e[h];
+	e[h] = temp;
 
 }
 
