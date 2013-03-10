@@ -85,7 +85,7 @@ int count = 0;
 struct node ** stack ;
 
 void tarjan(int v,int * index,int * lowLink,struct node **list,int * strong,int * S) {
-//	printf("tarjan\n");
+
 	index[v] = indexNo;
 	lowLink[v] = indexNo;
 	indexNo++;
@@ -94,7 +94,6 @@ void tarjan(int v,int * index,int * lowLink,struct node **list,int * strong,int 
 
 	struct node * t;
 	t = list[v];
-//	printf("tarjan for %d\n",v);
 	while(t!=NULL) {
 		if (index[t->no]==-1) {
 			tarjan(t->no,index,lowLink,list,strong,S);
@@ -108,16 +107,16 @@ void tarjan(int v,int * index,int * lowLink,struct node **list,int * strong,int 
 		t=t->next;
 
 	}
-//	printf("after loop\n");
+
 	int u;	
 	if (lowLink[v] == index[v]) {
-//		printf("for v = %d\n",v);
+
 		count++;
 		do {
 			u = pop(stack);
 			S[u] = 0;
 			strong[u] = count;
-		//	printf("%d\n",u);
+
 
 		} while( u != v);
 	}
@@ -161,5 +160,5 @@ int main() {
 		}
 	}
 
-	printf("the result is %d\n", count2);
+	printf("%d\n", count2);
 }
