@@ -38,7 +38,7 @@ void push(struct node ** list,int node) {
 	
 	struct node * n = malloc(sizeof(struct node));
 	n->no = node;
-	n->next = NULL;
+	n->next = *list;
 	*list = n;
 }
 
@@ -83,17 +83,18 @@ void insert(struct node ** e,int h,int t) {
 int indexNo = 0;
 int count = 0;
 struct node ** stack ;
+
 void tarjan(int v,int * index,int * lowLink,struct node **list,int * strong,int * S) {
-	printf("tarjan\n");
+//	printf("tarjan\n");
 	index[v] = indexNo;
 	lowLink[v] = indexNo;
-	index++;
+	indexNo++;
 	push(stack,v);
 	S[v] = 1;
 
 	struct node * t;
 	t = list[v];
-	
+//	printf("tarjan for %d\n",v);
 	while(t!=NULL) {
 		if (index[t->no]==-1) {
 			tarjan(t->no,index,lowLink,list,strong,S);
@@ -107,14 +108,16 @@ void tarjan(int v,int * index,int * lowLink,struct node **list,int * strong,int 
 		t=t->next;
 
 	}
+//	printf("after loop\n");
 	int u;	
 	if (lowLink[v] == index[v]) {
+//		printf("for v = %d\n",v);
 		count++;
 		do {
 			u = pop(stack);
 			S[u] = 0;
 			strong[u] = count;
-
+		//	printf("%d\n",u);
 
 		} while( u != v);
 	}
@@ -152,12 +155,11 @@ int main() {
 	}
 	
 	int count2 = 0;
-
-	for (i=0;i<=nodeNo;i++) {
-		if (strong[i] == count) {
+	for (i=0;i<nodeNo;i++) {
+		if (strong[i] == 1) {
 			count2++;
 		}
 	}
 
-	printf("%d\n", count);
+	printf("the result is %d\n", count2);
 }
